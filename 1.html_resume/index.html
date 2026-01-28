@@ -1,159 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Aviraj Patil - Resume</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aviraj Patil - Portfolio</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: "Times New Roman", serif;
-      margin: 40px;
-      color: #000;
-      background-color: #fff;
+      font-family: 'Courier New', monospace;
+      background: #0a0a0a;
+      color: #00ff41;
+      line-height: 1.6;
+      padding: 40px 20px;
     }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+      padding-bottom: 30px;
+      border-bottom: 2px solid #00ff41;
+    }
+
     h1 {
-      margin-bottom: 5px;
+      font-size: 3em;
+      letter-spacing: 8px;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px #00ff41;
     }
+
     .subtitle {
-      font-size: 16px;
-      margin-bottom: 20px;
+      font-size: 1.1em;
+      opacity: 0.9;
     }
-    hr {
-      margin: 25px 0;
+
+    .subtitle::before {
+      content: '> ';
     }
+
     section {
-      margin-bottom: 25px;
+      margin-bottom: 50px;
+      padding: 30px;
+      border: 1px solid #00ff41;
     }
+
     h2 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      text-shadow: 0 0 5px #00ff41;
+    }
+
+    h2::after {
+      content: '_';
+      margin-left: 5px;
+    }
+
+    p {
+      margin-bottom: 15px;
+    }
+
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .skill-item {
+      padding: 15px;
+      border: 1px solid #00ff41;
+      text-align: center;
+    }
+
+    .project {
+      margin-bottom: 30px;
+      padding-left: 20px;
+      border-left: 3px solid #00ff41;
+    }
+
+    .project h3 {
+      font-size: 1.3em;
       margin-bottom: 10px;
     }
-    ul {
-      margin-top: 5px;
+
+    .project h3::before {
+      content: '// ';
+      color: #008f11;
     }
-    table {
-      border-collapse: collapse;
-      margin-top: 10px;
-      width: auto;
-    }
-    table, th, td {
-      border: 1px solid #000;
-    }
-    th, td {
+
+    .tech-tag {
+      display: inline-block;
       padding: 5px 10px;
+      border: 1px solid #00ff41;
+      margin: 5px 5px 5px 0;
+      font-size: 0.9em;
+    }
+
+    .tech-tag::before {
+      content: '<';
+      margin-right: 5px;
+    }
+
+    .tech-tag::after {
+      content: '>';
+      margin-left: 5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 15px;
+      border: 1px solid #00ff41;
       text-align: left;
     }
+
+    th {
+      background: rgba(0, 255, 65, 0.1);
+      text-shadow: 0 0 5px #00ff41;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .contact-item {
+      padding: 15px;
+      border: 1px solid #00ff41;
+    }
+
+    .contact-item::before {
+      content: '> ';
+    }
+
     footer {
-      margin-top: 30px;
-      font-size: 14px;
+      text-align: center;
+      padding: 30px 0;
+      margin-top: 50px;
+      border-top: 2px solid #00ff41;
+      opacity: 0.8;
+    }
+
+    footer::before {
+      content: '// ';
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2em;
+        letter-spacing: 4px;
+      }
+
+      .skill-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      section {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .skill-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
-
 <body>
+  <div class="container">
+    <header>
+      <h1>AVIRAJ PATIL</h1>
+      <p class="subtitle">SYSTEM ENGINEER | CODE ARCHITECT | DIGITAL WARRIOR</p>
+    </header>
 
-<header>
-  <h1>Aviraj Patil</h1>
-  <p class="subtitle">
-    Engineering Student | Aspiring Software Developer
-  </p>
-</header>
+    <section>
+      <h2>ABOUT.SYS</h2>
+      <p>I am Neo in training. Currently jacked into the Electronics and Computer Science program at Pillai HOC College of Engineering. My mission: to master the art of code, bend reality with algorithms, and build systems that make the impossible possible. There is no spoon, only semicolons.</p>
+    </section>
 
-<hr />
+    <section>
+      <h2>SKILLS.DAT</h2>
+      <div class="skill-grid">
+        <div class="skill-item">HTML & CSS</div>
+        <div class="skill-item">JavaScript</div>
+        <div class="skill-item">Git & GitHub</div>
+        <div class="skill-item">Problem Solving</div>
+        <div class="skill-item">Algorithm Design</div>
+        <div class="skill-item">Debugging</div>
+      </div>
+    </section>
 
-<section>
-  <h2>About Me</h2>
-  <p>
-    I am an engineering student pursuing a Bachelor of Engineering in Electronics
-    and Computer Science. I am passionate about learning software development and
-    building practical technical skills.
-  </p>
-</section>
+    <section>
+      <h2>EXPERIENCE.LOG</h2>
+      <table>
+        <tr>
+          <th>POSITION</th>
+          <th>ORGANIZATION</th>
+          <th>DURATION</th>
+        </tr>
+        <tr>
+          <td>Student Engineer</td>
+          <td>Pillai HOC College of Engineering</td>
+          <td>2022 - Present</td>
+        </tr>
+      </table>
+    </section>
 
-<section>
-  <h2>Skills</h2>
-  <ul>
-    <li>HTML & CSS</li>
-    <li>JavaScript</li>
-    <li>Basic Programming Concepts</li>
-    <li>Problem Solving</li>
-    <li>Git & GitHub</li>
-  </ul>
-</section>
+    <section>
+      <h2>PROJECTS.DIR</h2>
+      
+      <div class="project">
+        <h3>Resume Website</h3>
+        <p>First step into the Matrix. Built a single-page resume focusing on clean architecture and user experience. Like Morpheus said, "I can only show you the door. You're the one that has to walk through it." This was my door.</p>
+        <div>
+          <span class="tech-tag">HTML</span>
+          <span class="tech-tag">CSS</span>
+        </div>
+      </div>
 
-<hr />
+      <div class="project">
+        <h3>Mini Web Applications</h3>
+        <p>Training simulations to master the fundamentals. Multiple web pages exploring layouts, forms, and interactive elements. "What you must learn is that these rules are no different than the rules of a computer system" - and I'm learning to break them.</p>
+        <div>
+          <span class="tech-tag">HTML</span>
+          <span class="tech-tag">CSS</span>
+          <span class="tech-tag">JavaScript</span>
+        </div>
+      </div>
+    </section>
 
-<section>
-  <h2>Experience</h2>
-  <table>
-    <tr>
-      <th>Position</th>
-      <th>Organization</th>
-      <th>Duration</th>
-    </tr>
-    <tr>
-      <td>Student</td>
-      <td>Pillai HOC College of Engineering</td>
-      <td>2022 - Present</td>
-    </tr>
-  </table>
-</section>
+    <section>
+      <h2>EDUCATION.DB</h2>
+      <table>
+        <tr>
+          <th>DEGREE</th>
+          <th>INSTITUTION</th>
+          <th>TIMELINE</th>
+        </tr>
+        <tr>
+          <td>B.E. in Electronics & Computer Science</td>
+          <td>Pillai HOC College of Engineering</td>
+          <td>2022 - 2026</td>
+        </tr>
+      </table>
+    </section>
 
-<hr />
+    <section>
+      <h2>CONTACT.INI</h2>
+      <div class="contact-info">
+        <div class="contact-item">
+          <strong>EMAIL:</strong> avirajpatil224@gmail.com
+        </div>
+        <div class="contact-item">
+          <strong>PHONE:</strong> 8546836569
+        </div>
+      </div>
+    </section>
 
-<section>
-  <h2>Projects</h2>
-
-  <h3>Project 1: Resume Website</h3>
-  <p>
-    Created a single-page resume website using HTML and basic CSS focusing on
-    structure and readability.
-  </p>
-  <ul>
-    <li>Technologies: HTML, CSS</li>
-    <li>Timeline: 1 month</li>
-  </ul>
-
-  <h3>Project 2: Mini Web Pages</h3>
-  <p>
-    Developed small web pages to practice layouts, lists, tables, and forms.
-  </p>
-  <ul>
-    <li>Technologies: HTML, CSS</li>
-    <li>Timeline: Ongoing</li>
-  </ul>
-</section>
-
-<hr />
-
-<section>
-  <h2>Education</h2>
-  <table>
-    <tr>
-      <th>Degree</th>
-      <th>Institution</th>
-      <th>Year</th>
-    </tr>
-    <tr>
-      <td>BE in ECS</td>
-      <td>Pillai HOC College of Engineering</td>
-      <td>2022 - 2026</td>
-    </tr>
-  </table>
-</section>
-
-<hr />
-
-<section>
-  <h2>Contact</h2>
-  <p><strong>Email:</strong> avirajpatil224@gmail.com</p>
-  <p><strong>Phone:</strong> 8546836569</p>
-</section>
-
-<hr />
-
-<footer>
-  © 2026 Aviraj Patil. All rights reserved.
-</footer>
-
+    <footer>
+      COPYRIGHT 2026 AVIRAJ PATIL | "FREE YOUR MIND" | ALL RIGHTS RESERVED
+    </footer>
+  </div>
 </body>
 </html>
