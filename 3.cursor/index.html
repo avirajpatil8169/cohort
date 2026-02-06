@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cursor - The AI Code Editor</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+    --bg-color: #0c0c0c;
+    --text-primary: #ffffff;
+    --text-secondary: #a1a1aa;
+    --accent-border: #27272a;
+    --button-bg: #ffffff;
+    --button-text: #000000;
+    --card-bg: #18181b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s;
+}
+
+ul {
+    list-style: none;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(12, 12, 12, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 16px 0;
+}
+
+.nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-weight: 600;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 32px;
+}
+
+.nav-links a {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    color: var(--text-primary);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.btn-link {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    border: 1px solid transparent;
+}
+
+.hero {
+    padding: 120px 0 80px;
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.hero h1 {
+    font-size: 4rem;
+    font-weight: 500;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+}
+
+.hero-cta {
+    margin-top: 32px;
+    display: inline-flex;
+    align-items: center;
+    background: var(--button-bg);
+    color: var(--button-text);
+    padding: 12px 24px;
+    border-radius: 9999px;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.hero-image-container {
+    margin-top: 80px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--accent-border);
+    background: #000;
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.editor-mockup {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.trusted-by {
+    padding: 60px 0;
+    border-bottom: 1px solid var(--accent-border);
+}
+
+.logos-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0.4;
+    gap: 40px;
+}
+
+.logo-placeholder {
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+}
+
+.features-section {
+    padding: 120px 0;
+}
+
+.feature-block {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    margin-bottom: 160px;
+}
+
+.feature-block:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.feature-text {
+    flex: 1;
+}
+
+.feature-text h2 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+}
+
+.feature-text p {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.feature-visual {
+    flex: 1;
+    background: var(--card-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: 12px;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+}
+
+.feature-icon {
+    width: 200px;
+    height: 200px;
+    opacity: 0.6;
+}
+
+.cards-section {
+    padding: 80px 0;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-header h2 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: 12px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.card-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 8px;
+    opacity: 0.9;
+}
+
+.card h3 {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.card p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.testimonials {
+    padding: 100px 0;
+}
+
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.testimonial-card {
+    background: transparent;
+    border: 1px solid var(--accent-border);
+    padding: 32px;
+    border-radius: 12px;
+}
+
+.quote {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    color: #d4d4d8;
+}
+
+.author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.author-info h4 {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.author-info span {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.use-cases {
+    padding: 80px 0;
+}
+
+.use-case-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--accent-border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.use-case-icon-container {
+    height: 200px;
+    background: #27272a;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.use-case-icon {
+    width: 100px;
+    height: 100px;
+    opacity: 0.8;
+}
+
+.use-case-content {
+    padding: 24px;
+    background: var(--card-bg);
+}
+
+.use-case-content h3 {
+    margin-bottom: 8px;
+}
+
+.use-case-content p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.changelog {
+    padding: 80px 0;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.update-item {
+    display: flex;
+    gap: 32px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--accent-border);
+}
+
+.update-date {
+    color: var(--text-secondary);
+    font-family: monospace;
+    font-size: 0.9rem;
+    min-width: 120px;
+}
+
+.update-content h3 {
+    font-size: 1.25rem;
+    margin-bottom: 8px;
+}
+
+.update-content p {
+    color: var(--text-secondary);
+}
+
+.team-section {
+    padding: 100px 0;
+}
+
+.team-container {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+}
+
+.team-icon-container {
+    width: 50%;
+    height: 400px;
+    background: #27272a;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.team-icon {
+    width: 180px;
+    height: 180px;
+    opacity: 0.5;
+}
+
+.team-content {
+    width: 50%;
+}
+
+.team-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+}
+
+.team-content p {
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    font-size: 1.1rem;
+}
+
+.cta-link {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.final-cta {
+    padding: 160px 0;
+    text-align: center;
+}
+
+.final-cta h2 {
+    font-size: 4rem;
+    letter-spacing: -0.03em;
+    margin-bottom: 40px;
+}
+
+footer {
+    border-top: 1px solid var(--accent-border);
+    padding: 80px 0 40px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.footer-col h4 {
+    color: var(--text-primary);
+    margin-bottom: 24px;
+    font-size: 0.95rem;
+}
+
+.footer-col ul li {
+    margin-bottom: 12px;
+}
+
+.footer-col ul li a:hover {
+    color: var(--text-primary);
+}
+
+.copyright {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 32px;
+    border-top: 1px solid var(--accent-border);
+}
+
+.code-window {
+    background: #1e1e1e;
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+}
+
+.window-header {
+    background: #252526;
+    padding: 10px 16px;
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid #000;
+}
+
+.dot { 
+    width: 12px; 
+    height: 12px; 
+    border-radius: 50%; 
+}
+
+.red { background: #ff5f56; }
+.yellow { background: #ffbd2e; }
+.green { background: #27c93f; }
+
+.code-area {
+    display: flex;
+    padding: 0;
+}
+
+.sidebar {
+    width: 200px;
+    background: #252526;
+    padding: 16px;
+    color: #858585;
+    border-right: 1px solid #000;
+}
+
+.main-code {
+    flex: 1;
+    padding: 24px;
+    color: #d4d4d4;
+}
+
+.line { margin-bottom: 4px; }
+.keyword { color: #569cd6; }
+.string { color: #ce9178; }
+.comment { color: #6a9955; }
+.func { color: #dcdcaa; }
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="container nav-inner">
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 19L5 12L12 5" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M19 19L12 12L19 5" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            CURSOR
+        </div>
+        <div class="nav-links">
+            <a href="#">Features</a>
+            <a href="#">Enterprise</a>
+            <a href="#">Pricing</a>
+            <a href="#">Resources</a>
+        </div>
+        <div class="nav-actions">
+            <a href="#" class="btn-link">Sign in</a>
+            <a href="#" class="btn-primary">Download</a>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Built to make you extraordinarily productive, Cursor is the best way to code with AI.</h1>
+                <a href="#" class="hero-cta">Download for macOS ↓</a>
+            </div>
+
+            <div class="hero-image-container">
+                <div class="code-window">
+                    <div class="window-header">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                        <div style="margin-left: auto; color: #888; font-size: 12px;">train_model.py</div>
+                    </div>
+                    <div class="code-area">
+                        <div class="sidebar">
+                            <div style="margin-bottom: 12px;">EXPLORER</div>
+                            <div>> SRC</div>
+                            <div style="padding-left: 10px; color: #fff;">train_model.py</div>
+                            <div style="padding-left: 10px;">utils.py</div>
+                        </div>
+                        <div class="main-code">
+                            <div class="line"><span class="keyword">import</span> torch</div>
+                            <div class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</div>
+                            <div class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> DataLoader</div>
+                            <br>
+                            <div class="line"><span class="keyword">def</span> <span class="func">train_epoch</span>(model, loader, optimizer):</div>
+                            <div class="line" style="padding-left: 20px;">scaler = torch.cuda.amp.GradScaler()</div>
+                            <div class="line" style="padding-left: 20px;"><span class="keyword">for</span> batch <span class="keyword">in</span> loader:</div>
+                            <div class="line" style="padding-left: 40px;">optimizer.zero_grad()</div>
+                            <div class="line" style="padding-left: 40px;"><span class="keyword">with</span> torch.cuda.amp.autocast():</div>
+                            <div class="line" style="padding-left: 60px;">loss = model(batch)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="trusted-by">
+        <div class="container">
+            <div class="logos-grid">
+                <span class="logo-placeholder">OPENAI</span>
+                <span class="logo-placeholder">PERPLEXITY</span>
+                <span class="logo-placeholder">REPLIT</span>
+                <span class="logo-placeholder">MIDJOURNEY</span>
+                <span class="logo-placeholder">STARTUP</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <div class="container">
+            <div class="feature-block">
+                <div class="feature-text">
+                    <h2>Chat with your codebase</h2>
+                    <p>Get answers that are relevant to your repository. Cursor indexes your code so you can ask high-level questions about the architecture or specific implementation details.</p>
+                </div>
+                <div class="feature-visual">
+                    <svg class="feature-icon" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="20" y="30" width="160" height="140" rx="8" stroke-width="3"/>
+                        <circle cx="35" cy="45" r="3" fill="currentColor"/>
+                        <circle cx="45" cy="45" r="3" fill="currentColor"/>
+                        <circle cx="55" cy="45" r="3" fill="currentColor"/>
+                        <line x1="20" y1="60" x2="180" y2="60" stroke-width="2"/>
+                        <path d="M40 80 L80 80 M40 95 L120 95 M40 110 L100 110" stroke-width="2.5"/>
+                        <rect x="130" y="75" width="40" height="45" rx="4" fill="currentColor" opacity="0.1"/>
+                        <path d="M145 85 L155 95 L145 105" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M40 135 L70 135 M40 150 L90 150" stroke-width="2.5"/>
+                        <circle cx="160" cy="142" r="8" stroke-width="2.5"/>
+                        <path d="M157 139 L160 142 L165 137" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="feature-block">
+                <div class="feature-text">
+                    <h2>Tab Autocomplete</h2>
+                    <p>Cursor predicts your next edit. It's not just a single line; it edits across multiple lines, fixing bugs and adding logic before you even type.</p>
+                </div>
+                <div class="feature-visual">
+                    <svg class="feature-icon" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="20" y="20" width="160" height="160" rx="8" stroke-width="3"/>
+                        <line x1="20" y1="45" x2="180" y2="45" stroke-width="2"/>
+                        <circle cx="35" cy="32" r="3" fill="currentColor"/>
+                        <circle cx="45" cy="32" r="3" fill="currentColor"/>
+                        <circle cx="55" cy="32" r="3" fill="currentColor"/>
+                        
+                        <rect x="25" y="50" width="4" height="120" fill="currentColor" opacity="0.3"/>
+                        <text x="40" y="68" font-family="monospace" font-size="12" fill="currentColor" opacity="0.8">1</text>
+                        <text x="40" y="88" font-family="monospace" font-size="12" fill="currentColor" opacity="0.8">2</text>
+                        <text x="40" y="108" font-family="monospace" font-size="12" fill="currentColor" opacity="0.8">3</text>
+                        <text x="40" y="128" font-family="monospace" font-size="12" fill="currentColor" opacity="0.8">4</text>
+                        <text x="40" y="148" font-family="monospace" font-size="12" fill="currentColor" opacity="0.8">5</text>
+                        
+                        <line x1="55" y1="65" x2="95" y2="65" stroke-width="2.5"/>
+                        <line x1="55" y1="85" x2="120" y2="85" stroke-width="2.5"/>
+                        <line x1="70" y1="105" x2="140" y2="105" stroke-width="2.5" opacity="0.4" stroke-dasharray="4 2"/>
+                        <line x1="70" y1="125" x2="110" y2="125" stroke-width="2.5" opacity="0.4" stroke-dasharray="4 2"/>
+                        <line x1="70" y1="145" x2="130" y2="145" stroke-width="2.5" opacity="0.4" stroke-dasharray="4 2"/>
+                        
+                        <rect x="135" y="95" width="35" height="60" rx="4" fill="currentColor" opacity="0.08" stroke-width="2"/>
+                        <path d="M145 110 L160 110 M145 120 L160 120 M145 130 L155 130" stroke-width="1.5" opacity="0.6"/>
+                        <circle cx="162" cy="105" r="6" fill="currentColor" opacity="0.2"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="feature-block">
+                <div class="feature-text">
+                    <h2>Privacy Mode</h2>
+                    <p>Keep your code private. With privacy mode enabled, none of your code is stored on our servers. You remain in complete control.</p>
+                </div>
+                <div class="feature-visual">
+                    <svg class="feature-icon" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M100 30 L160 50 L160 100 C160 135 135 160 100 170 C65 160 40 135 40 100 L40 50 Z" stroke-width="3" fill="currentColor" opacity="0.05"/>
+                        <path d="M100 30 L160 50 L160 100 C160 135 135 160 100 170 C65 160 40 135 40 100 L40 50 Z" stroke-width="3"/>
+                        
+                        <circle cx="100" cy="85" r="20" stroke-width="3"/>
+                        <rect x="90" y="102" width="20" height="25" rx="2" stroke-width="3"/>
+                        <circle cx="100" cy="85" r="6" fill="currentColor"/>
+                        <line x1="100" y1="85" x2="100" y2="102" stroke-width="3"/>
+                        
+                        <path d="M70 55 L75 60 L65 70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+                        <path d="M130 55 L135 60 L125 70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+                        
+                        <circle cx="70" cy="110" r="3" fill="currentColor" opacity="0.3"/>
+                        <circle cx="130" cy="110" r="3" fill="currentColor" opacity="0.3"/>
+                        <circle cx="85" cy="140" r="3" fill="currentColor" opacity="0.3"/>
+                        <circle cx="115" cy="140" r="3" fill="currentColor" opacity="0.3"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cards-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Everything you expect</h2>
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <svg class="card-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M14 10 L8 16 L8 32 L14 38" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M34 10 L40 16 L40 32 L34 38" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line x1="28" y1="12" x2="20" y2="36" stroke-linecap="round"/>
+                        <circle cx="24" cy="24" r="20" stroke-width="2" opacity="0.15"/>
+                    </svg>
+                    <h3>VS Code Fork</h3>
+                    <p>Migrate in one click. All your extensions, themes, and keybindings work out of the box.</p>
+                </div>
+                <div class="card">
+                    <svg class="card-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <rect x="6" y="8" width="36" height="32" rx="3" stroke-width="2.5"/>
+                        <line x1="6" y1="16" x2="42" y2="16" stroke-width="2"/>
+                        <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                        <circle cx="17" cy="12" r="1.5" fill="currentColor"/>
+                        <circle cx="22" cy="12" r="1.5" fill="currentColor"/>
+                        <path d="M12 24 L16 27 L12 30" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line x1="20" y1="30" x2="30" y2="30" stroke-linecap="round"/>
+                    </svg>
+                    <h3>Terminal Integration</h3>
+                    <p>Run commands, fix errors, and navigate your file system directly with AI assistance.</p>
+                </div>
+                <div class="card">
+                    <svg class="card-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <rect x="4" y="6" width="40" height="36" rx="3" stroke-width="2.5"/>
+                        <line x1="24" y1="6" x2="24" y2="42" stroke-width="2"/>
+                        <line x1="10" y1="15" x2="18" y2="15" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                        <line x1="10" y1="22" x2="18" y2="22" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="10" y1="29" x2="18" y2="29" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                        <line x1="30" y1="15" x2="38" y2="15" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                        <line x1="30" y1="22" x2="38" y2="22" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="30" y1="29" x2="38" y2="29" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="8" cy="22" r="2" fill="currentColor" opacity="0.3"/>
+                        <circle cx="40" cy="29" r="2" fill="currentColor" opacity="0.3"/>
+                    </svg>
+                    <h3>Diff Views</h3>
+                    <p>Review AI-suggested changes with a clean, easy-to-read diff viewer before accepting.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p class="quote">"Cursor has completely changed how I write code. It's like pair programming with a genius who knows my entire codebase."</p>
+                    <div class="author">
+                        <svg class="avatar" viewBox="0 0 40 40" fill="none">
+                            <defs>
+                                <linearGradient id="avatarGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="20" cy="20" r="20" fill="url(#avatarGrad1)"/>
+                            <circle cx="20" cy="15" r="7" fill="#ffffff" opacity="0.9"/>
+                            <path d="M8 35 C8 28 12 24 20 24 C28 24 32 28 32 35 L32 40 L8 40 Z" fill="#ffffff" opacity="0.9"/>
+                        </svg>
+                        <div class="author-info">
+                            <h4>Alex Chen</h4>
+                            <span>Senior Engineer @ TechCorp</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="quote">"The ability to reference documentation directly in the chat is a game changer. I spend way less time switching tabs."</p>
+                    <div class="author">
+                        <svg class="avatar" viewBox="0 0 40 40" fill="none">
+                            <defs>
+                                <linearGradient id="avatarGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#f43f5e;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="20" cy="20" r="20" fill="url(#avatarGrad2)"/>
+                            <circle cx="20" cy="15" r="7" fill="#ffffff" opacity="0.9"/>
+                            <path d="M8 35 C8 28 12 24 20 24 C28 24 32 28 32 35 L32 40 L8 40 Z" fill="#ffffff" opacity="0.9"/>
+                        </svg>
+                        <div class="author-info">
+                            <h4>Sarah Jones</h4>
+                            <span>Frontend Lead</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="quote">"I was skeptical about AI coding tools, but Cursor's 'codebase awareness' is actually real. It understands context perfectly."</p>
+                    <div class="author">
+                        <svg class="avatar" viewBox="0 0 40 40" fill="none">
+                            <defs>
+                                <linearGradient id="avatarGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#14b8a6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="20" cy="20" r="20" fill="url(#avatarGrad3)"/>
+                            <circle cx="20" cy="15" r="7" fill="#ffffff" opacity="0.9"/>
+                            <path d="M8 35 C8 28 12 24 20 24 C28 24 32 28 32 35 L32 40 L8 40 Z" fill="#ffffff" opacity="0.9"/>
+                        </svg>
+                        <div class="author-info">
+                            <h4>David Miller</h4>
+                            <span>Founder</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="use-cases">
+        <div class="container">
+            <div class="section-header">
+                <h2>Built for every stack</h2>
+            </div>
+            <div class="cards-grid">
+                <div class="use-case-card">
+                    <div class="use-case-icon-container">
+                        <svg class="use-case-icon" viewBox="0 0 100 100" fill="currentColor">
+                            <defs>
+                                <linearGradient id="pyGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#4B8BBE;stop-opacity:0.8" />
+                                    <stop offset="100%" style="stop-color:#306998;stop-opacity:0.8" />
+                                </linearGradient>
+                                <linearGradient id="pyGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#FFD43B;stop-opacity:0.8" />
+                                    <stop offset="100%" style="stop-color:#FFE873;stop-opacity:0.8" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M50,10 C35,10 25,15 25,25 L25,35 L50,35 L50,40 L20,40 C15,40 10,45 10,55 C10,65 15,70 20,70 L30,70 L30,55 C30,50 35,45 40,45 L60,45 C65,45 70,40 70,35 L70,25 C70,15 60,10 50,10 Z" fill="url(#pyGrad1)"/>
+                            <circle cx="37" cy="22" r="4" fill="#ffffff" opacity="0.9"/>
+                            <path d="M50,90 C65,90 75,85 75,75 L75,65 L50,65 L50,60 L80,60 C85,60 90,55 90,45 C90,35 85,30 80,30 L70,30 L70,45 C70,50 65,55 60,55 L40,55 C35,55 30,60 30,65 L30,75 C30,85 40,90 50,90 Z" fill="url(#pyGrad2)"/>
+                            <circle cx="63" cy="78" r="4" fill="#ffffff" opacity="0.9"/>
+                        </svg>
+                    </div>
+                    <div class="use-case-content">
+                        <h3>Python</h3>
+                        <p>Data science, ML, and backend scripting.</p>
+                    </div>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon-container">
+                        <svg class="use-case-icon" viewBox="0 0 100 100" fill="none">
+                            <defs>
+                                <linearGradient id="tsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#3178C6;stop-opacity:0.9" />
+                                    <stop offset="100%" style="stop-color:#235A97;stop-opacity:0.9" />
+                                </linearGradient>
+                            </defs>
+                            <rect x="10" y="10" width="80" height="80" rx="8" fill="url(#tsGrad)"/>
+                            <text x="20" y="55" font-family="Arial, sans-serif" font-size="45" font-weight="bold" fill="#ffffff">TS</text>
+                            <circle cx="75" cy="25" r="8" fill="#ffffff" opacity="0.2"/>
+                            <circle cx="25" cy="75" r="6" fill="#ffffff" opacity="0.15"/>
+                        </svg>
+                    </div>
+                    <div class="use-case-content">
+                        <h3>TypeScript/React</h3>
+                        <p>Full-stack web development with intelligent types.</p>
+                    </div>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon-container">
+                        <svg class="use-case-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                            <defs>
+                                <linearGradient id="rustGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#CE422B;stop-opacity:0.8" />
+                                    <stop offset="100%" style="stop-color:#8B2500;stop-opacity:0.8" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="50" cy="50" r="35" fill="url(#rustGrad)" stroke="none"/>
+                            <path d="M50 20 L55 30 L66 28 L60 38 L70 45 L58 48 L58 60 L50 54 L42 60 L42 48 L30 45 L40 38 L34 28 L45 30 Z" fill="#000000" opacity="0.3" stroke="none"/>
+                            <circle cx="50" cy="50" r="12" fill="#ffffff" opacity="0.9" stroke="none"/>
+                            <circle cx="50" cy="50" r="7" fill="#000000" opacity="0.3" stroke="none"/>
+                            <circle cx="30" cy="30" r="3" fill="#ffffff" opacity="0.6" stroke="none"/>
+                            <circle cx="70" cy="30" r="3" fill="#ffffff" opacity="0.6" stroke="none"/>
+                            <circle cx="30" cy="70" r="3" fill="#ffffff" opacity="0.6" stroke="none"/>
+                            <circle cx="70" cy="70" r="3" fill="#ffffff" opacity="0.6" stroke="none"/>
+                        </svg>
+                    </div>
+                    <div class="use-case-content">
+                        <h3>Rust</h3>
+                        <p>Systems programming with borrow checker support.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="changelog">
+        <div class="section-header">
+            <h2>Changelog</h2>
+        </div>
+        <div class="update-item">
+            <div class="update-date">Oct 24, 2023</div>
+            <div class="update-content">
+                <h3>Interpreter Mode</h3>
+                <p>Cursor can now run code to solve problems, write tests, and explore your codebase dynamically.</p>
+            </div>
+        </div>
+        <div class="update-item">
+            <div class="update-date">Oct 10, 2023</div>
+            <div class="update-content">
+                <h3>Rules for AI</h3>
+                <p>Define custom instructions that the AI should follow for every generation in your project.</p>
+            </div>
+        </div>
+        <div class="update-item">
+            <div class="update-date">Sep 28, 2023</div>
+            <div class="update-content">
+                <h3>Composer</h3>
+                <p>A new way to write code across multiple files simultaneously.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-section">
+        <div class="container team-container">
+            <div class="team-icon-container">
+                <svg class="team-icon" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="3">
+                    <circle cx="70" cy="60" r="20" stroke-width="3"/>
+                    <path d="M40 130 C40 105 52 90 70 90 C88 90 100 105 100 130" stroke-width="3"/>
+                    
+                    <circle cx="130" cy="60" r="20" stroke-width="3"/>
+                    <path d="M100 130 C100 105 112 90 130 90 C148 90 160 105 160 130" stroke-width="3"/>
+                    
+                    <circle cx="100" cy="90" r="20" stroke-width="3" opacity="0.6"/>
+                    <path d="M70 160 C70 135 82 120 100 120 C118 120 130 135 130 160" stroke-width="3" opacity="0.6"/>
+                    
+                    <circle cx="50" cy="45" r="3" fill="currentColor" opacity="0.3"/>
+                    <circle cx="150" cy="45" r="3" fill="currentColor" opacity="0.3"/>
+                    <circle cx="100" cy="75" r="3" fill="currentColor" opacity="0.2"/>
+                    
+                    <path d="M85 150 L100 160 L115 150" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+                </svg>
+            </div>
+            <div class="team-content">
+                <h2>A small team building the future of programming.</h2>
+                <p>We are a team of researchers and engineers building the best tool for software development. We believe coding should be more creative and less repetitive.</p>
+                <a href="#" class="cta-link">Read our story -></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta">
+        <div class="container">
+            <h2>Build faster.</h2>
+            <a href="#" class="hero-cta">Download for macOS</a>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo" style="margin-bottom: 20px;">CURSOR</div>
+            </div>
+            <div class="footer-col">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#">Download</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Enterprise</a></li>
+                    <li><a href="#">Changelog</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Forum</a></li>
+                    <li><a href="#">Help Center</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <span>&copy; 2024 Anysphere Inc.</span>
+            <span>Terms & Privacy</span>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
